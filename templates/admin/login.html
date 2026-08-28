@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Admin login - Mini Shop{% endblock %}
+{% block content %}
+  <form method="post" class="card card-body shadow-sm mx-auto p-4" style="max-width: 28rem">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <h1 class="fw-bold">Admin login</h1>
+    <label class="form-label mt-3">Username<input class="form-control" name="username" required autofocus></label>
+    <label class="form-label mt-3">Password<input class="form-control" type="password" name="password" required></label>
+    <button class="btn btn-primary mt-4">Log in</button>
+  </form>
+{% endblock %}
+

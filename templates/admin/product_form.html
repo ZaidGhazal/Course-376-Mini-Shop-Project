@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if product else 'Add' }} product - Mini Shop{% endblock %}
+{% block content %}
+  <form method="post" class="card card-body shadow-sm mx-auto p-4" style="max-width: 46rem">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <h1 class="fw-bold">{{ 'Edit' if product else 'Add' }} product</h1>
+    {% if errors %}<div class="alert alert-danger"><ul class="mb-0">{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>{% endif %}
+    <label class="form-label mt-3">Name<input class="form-control" name="name" value="{{ form.get('name', product.name if product else '') }}" required></label>
+    <label class="form-label mt-3">Description<textarea class="form-control" name="description" rows="4">{{ form.get('description', product.description if product else '') }}</textarea></label>
+    <div class="row g-3 mt-1"><div class="col-md-6"><label class="form-label">Price<input class="form-control" type="number" min="0" step="0.01" name="price" value="{{ form.get('price', product.price if product else '') }}" required></label></div><div class="col-md-6"><label class="form-label">Category<select class="form-select" name="category_id" required><option value="">Choose…</option>{% for category in categories %}<option value="{{ category.id }}" {% if form.get('category_id', product.category_id if product else '')|string == category.id|string %}selected{% endif %}>{{ category.name }}</option>{% endfor %}</select></label></div></div>
+    <label class="form-label mt-3">Image URL (optional)<input class="form-control" type="url" name="image_url" value="{{ form.get('image_url', product.image_url if product else '') }}"></label>
+    <div class="form-check mt-3"><input class="form-check-input" type="checkbox" name="is_active" id="is-active" {% if form.get('is_active', product.is_active if product else true) %}checked{% endif %}><label class="form-check-label" for="is-active">Show in catalog</label></div>
+    <div class="mt-4"><button class="btn btn-primary">Save</button><a class="btn btn-link" href="/admin">Cancel</a></div>
+  </form>
+{% endblock %}
+

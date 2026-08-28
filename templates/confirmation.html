@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Order confirmed - Mini Shop{% endblock %}
+{% block content %}
+  <div class="card card-body shadow-sm text-center mx-auto p-5" style="max-width: 42rem">
+    <div class="display-3 text-success">✓</div>
+    <h1 class="fw-bold">Order received</h1>
+    <p class="text-secondary">Thanks, {{ order.customer_name }}. Your mock order number is <strong>#{{ order.id }}</strong>.</p>
+    <p>Total: <strong>${{ '%.2f'|format(order.total) }}</strong></p>
+    <a href="/">Return to products</a>
+  </div>
+{% endblock %}
+

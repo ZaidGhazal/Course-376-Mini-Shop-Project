@@ -1,0 +1,4 @@
+body { min-height: 100vh; }
+.product-image { height: 12rem; display: grid; place-items: center; font-size: 4rem; background: linear-gradient(135deg, #dbeafe, #ccfbf1); }
+.product-detail-image { min-height: 22rem; display: grid; place-items: center; font-size: 6rem; background: linear-gradient(135deg, #dbeafe, #ccfbf1); }
+

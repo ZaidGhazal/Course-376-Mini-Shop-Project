@@ -1,0 +1,2 @@
+"""Mini Shop FastAPI package."""
+

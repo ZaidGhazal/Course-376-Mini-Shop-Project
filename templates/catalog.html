@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Products - Mini Shop{% endblock %}
+{% block content %}
+  <p class="text-uppercase text-primary fw-semibold mb-1">Student starter</p>
+  <h1 class="display-5 fw-bold">Products</h1>
+  <p class="text-secondary mb-4">Browse the inherited catalog and choose an item to learn more.</p>
+
+  {% if products %}
+    <div class="row g-4">
+      {% for product in products %}
+        <div class="col-md-6 col-lg-4">
+          <article class="card h-100 shadow-sm">
+            <div class="product-image">
+              {% if product.image_url %}<img src="{{ product.image_url }}" alt="" class="w-100 h-100 object-fit-cover">{% else %}🛍️{% endif %}
+            </div>
+            <div class="card-body d-flex flex-column">
+              <small class="text-primary">{{ product.category.name }}</small>
+              <h2 class="h5 mt-1"><a class="text-dark text-decoration-none" href="/products/{{ product.id }}">{{ product.name }}</a></h2>
+              <p class="text-secondary flex-grow-1">{{ product.description }}</p>
+              <div class="d-flex align-items-center justify-content-between">
+                <strong>${{ '%.2f'|format(product.price) }}</strong>
+                <form method="post" action="/cart/items/{{ product.id }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <button class="btn btn-primary">Add to cart</button>
+                </form>
+              </div>
+            </div>
+          </article>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-secondary">No products found.</div>
+  {% endif %}
+{% endblock %}
+

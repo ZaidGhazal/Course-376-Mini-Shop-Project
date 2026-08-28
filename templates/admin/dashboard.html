@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Admin - Mini Shop{% endblock %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center gap-3">
+    <div><p class="text-uppercase text-primary fw-semibold mb-1">Admin</p><h1 class="fw-bold">Inventory</h1></div>
+    <a class="btn btn-primary" href="/admin/products/new">Add product</a>
+  </div>
+  <div class="table-responsive card shadow-sm mt-4"><table class="table table-hover align-middle mb-0">
+    <thead class="table-light"><tr><th>Product</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>{% for product in products %}<tr><td>{{ product.name }}</td><td>{{ product.category.name }}</td><td>${{ '%.2f'|format(product.price) }}</td><td>{{ 'Active' if product.is_active else 'Hidden' }}</td><td><div class="d-flex gap-2"><a class="btn btn-sm btn-outline-primary" href="/admin/products/{{ product.id }}/edit">Edit</a><form method="post" action="/admin/products/{{ product.id }}/delete"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn btn-sm btn-outline-danger">Delete</button></form></div></td></tr>{% else %}<tr><td colspan="5">No products yet.</td></tr>{% endfor %}</tbody>
+  </table></div>
+
+  <section class="mt-5"><h2 class="h3 fw-bold">Categories</h2>
+    <form method="post" action="/admin/categories" class="row g-2 mt-2" style="max-width: 36rem"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><div class="col"><input class="form-control" name="name" placeholder="New category name" required></div><div class="col-auto"><button class="btn btn-dark">Add</button></div></form>
+    <div class="row g-3 mt-2">{% for category in categories %}<div class="col-md-6"><div class="card card-body"><div class="d-flex gap-2"><form class="d-flex flex-grow-1 gap-2" method="post" action="/admin/categories/{{ category.id }}/rename"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input class="form-control" name="name" value="{{ category.name }}" required><button class="btn btn-outline-primary">Rename</button></form><form method="post" action="/admin/categories/{{ category.id }}/delete"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn btn-outline-danger">Delete</button></form></div></div></div>{% endfor %}</div>
+  </section>
+{% endblock %}
+

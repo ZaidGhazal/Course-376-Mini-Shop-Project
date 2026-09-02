@@ -9,7 +9,7 @@ The starter is intentionally simple and incomplete. A missing feature is not aut
 ## Technology used
 
 - Python 3.10 or newer
-- FastAPI for routes and request handling
+- Flask for routes, sessions, and request handling
 - Jinja2 for server-rendered customer and admin pages
 - Bootstrap through a CDN for basic responsive styling
 - SQLAlchemy for database access
@@ -45,7 +45,7 @@ Use SQLite first if you only need to run and inspect the inherited system. SQLit
 ### 1. Open the project directory
 
 ```bash
-cd "Mini Shop - Starter"
+cd "Course-376-Mini-Shop-Project"
 ```
 
 ### 2. Create a virtual environment
@@ -98,7 +98,7 @@ python app.py
 Open these addresses:
 
 - Storefront: <http://127.0.0.1:8000>
-- FastAPI documentation: <http://127.0.0.1:8000/docs>
+- Health check: <http://127.0.0.1:8000/api/health>
 - Admin login: <http://127.0.0.1:8000/admin/login>
 
 Development administrator:
@@ -256,7 +256,7 @@ There is no migration system in this starter. When the team changes a SQLAlchemy
 The milestone document and SRS are the grading authorities. In general, your team will work toward:
 
 - Persistent database-backed carts and quantity updates.
-- Product search, category filtering, sorting, and pagination.
+- Product search, category filtering, and sorting.
 - Customer registration, login, logout, and profile management.
 - Wishlists and customer order history.
 - Guest-to-customer cart transfer.
@@ -268,31 +268,73 @@ The milestone document and SRS are the grading authorities. In general, your tea
 
 Do not treat this list as a complete defect report. Handover analysis is part of your assignment.
 
-## Milestone workflow
+## Assignment work on the codebase
 
-### Milestone 1: Analyze and plan
+The assignment titles and required work come from `PROJECT Milestone.docx`. This section only explains when you are expected to change the inherited code.
 
-Run the system, inspect the code and database, identify existing and missing behavior, record defects and inconsistencies, assign team roles, and create the initial backlog, schedule, Kanban board, and risk register.
+### Assignment 1: Handover Analysis + Project Planning
 
-### Milestone 2: Correct the requirements
+Run the application and starter tests. Inspect the Python code, templates, database tables, and saved data. Record what works, what is missing, confirmed defects, and documentation inconsistencies. **Do not implement future features for this assignment.**
 
-Update the SRS, roles, use cases, acceptance criteria, backlog, and traceability matrix. Keep requirement IDs stable when possible.
+### Assignment 2: Requirements + Use Cases + Backlog
 
-### Milestone 3: Correct the design
+Correct and expand the requirements, roles, use cases, backlog, and traceability information. Use the running code as evidence. **No production-code changes are required for this assignment.**
 
-Update the class/database design, architecture, sequence diagrams, activity diagrams, state diagrams, and user flows. Trace design elements to requirements.
+### Assignment 3: Architecture + UML Design
 
-### Milestone 4: Evolve the core system
+Design the corrected classes, database structure, components, sequences, activities, states, and user flows that will guide the later implementation. **No production-code changes are required for this assignment.** Do not overwrite the supplied PDF resources; create your team's updated diagram files separately.
 
-Implement the persistent cart, quantity behavior, checkout improvements, responsive pages, search/filter/sort, category management improvements, constraints, error handling, and regression tests.
+### Assignment 4: Core Modifications & Refactoring
 
-### Milestone 5: Add new features
+Modify the inherited code to implement the persistent cart, quantity update/remove behavior, checkout validation improvements, responsive/mobile UX, search/filter/sort, category management improvements, database constraints, and error handling. Add regression tests for every behavior you change.
 
-Implement customer accounts, profiles, wishlist, order history, inventory, customer/order administration, guest-cart transfer, and stronger authorization.
+The main files you will probably change are:
 
-### Milestone 6: Verify and finish
+- `mini_shop/models.py` for database-backed cart tables and constraints.
+- `mini_shop/schemas.py` for quantity, checkout, and search input validation.
+- `mini_shop/main.py` for cart, catalog, checkout, category, and error-handling routes.
+- `templates/cart.html`, `templates/catalog.html`, and other templates for the updated interface.
+- `static/styles.css` for responsive/mobile improvements.
+- `tests/` for regression and integration tests.
 
-Complete the automated/system tests, defect log, requirements coverage, traceability, risk review, planning records, final SRS/UML, demonstration, and engineering report.
+After the persistent cart is working and tested, replace the inherited `session["cart"]` dictionary with database-backed cart records. Keeping a small cart identifier in the signed session is acceptable. Do not remove guest checkout or server-rendered pages.
+
+### Assignment 5: New Features & Integration
+
+Add customer registration/login/logout, profile management, wishlist, order history/details, guest-to-customer cart handling, inventory/stock management, admin customer management, admin order management, and authorization/security improvements.
+
+This work will normally require:
+
+- New or extended SQLAlchemy models in `mini_shop/models.py`.
+- New Pydantic validation models in `mini_shop/schemas.py`.
+- New Flask routes and authorization helpers in `mini_shop/main.py`, or small route modules if the file becomes difficult to manage.
+- New customer and admin templates under `templates/`.
+- Updates to checkout, cart, product, navigation, and seed behavior.
+- Tests for successful behavior, invalid input, ownership, and unauthorized access.
+
+Keep guest and administrator authentication separate. Hash passwords, check record ownership, and never store real passwords or secrets in the repository.
+
+### Assignment 6: Testing + Traceability + Final Engineering Package
+
+Complete unit, integration, system/end-to-end, authentication/authorization, validation/error, selected performance, and regression testing. Correct defects found by those tests. Remove obsolete TODOs, debug output, dead code, and unused imports only after confirming they are no longer needed. Update the README, SRS, UML, traceability, and final engineering records so they describe the finished system.
+
+Do not delete or weaken a failing test simply to make the test run pass. Fix the implementation, or update the test only when an approved requirement has changed.
+
+## How to make a code change
+
+For each Assignment 4 or Assignment 5 feature:
+
+1. Confirm the requirement ID, backlog item, and acceptance criteria.
+2. Create a feature branch.
+3. Update the database model and validation model when the feature stores or validates new data.
+4. Add or edit Flask routes for the server-side behavior.
+5. Add or edit Jinja templates for the customer or administrator interface.
+6. Add automated tests for success, invalid input, and unauthorized access when applicable.
+7. Run the complete test suite with `pytest`.
+8. Open a pull request and request peer review.
+9. Update the SRS, diagrams, traceability matrix, backlog, and risk records affected by the change.
+
+Because this starter does not use migrations, model changes require students to recreate their local SQLite database or agree as a team how to update the shared MySQL database. Never reset a shared database without team approval.
 
 ## Git and teamwork rules
 
@@ -308,12 +350,12 @@ Complete the automated/system tests, defect log, requirements coverage, traceabi
 ## Project structure
 
 ```text
-app.py                       easy command for starting Uvicorn
+app.py                       easy command for starting Flask
 seed.py                      creates tables and sample data
 mini_shop/database.py        database engine and sessions
 mini_shop/models.py          SQLAlchemy database models
 mini_shop/schemas.py         Pydantic validation models
-mini_shop/main.py            FastAPI customer and admin routes
+mini_shop/main.py            Flask customer and admin routes
 templates/                   server-rendered Jinja pages
 static/styles.css            a few project-specific styles
 tests/test_app.py            starter automated tests
@@ -325,9 +367,9 @@ Most application behavior belongs in Python. Templates should display data and c
 
 ## Relationship to the supplied diagrams
 
-The supplied resources remain part of the project handover. Do not ignore them because the implementation uses FastAPI.
+The supplied resources remain part of the project handover and use the same Flask terminology as the starter code.
 
-In a supplied sequence diagram, the lifeline labeled **Flask App** represents the web-application/backend layer. In this starter, FastAPI implements that layer. The actors, messages, database operations, customer flow, admin flow, and expected behavior still apply unless your approved requirements analysis documents a correction.
+In the supplied sequence diagrams, the lifeline labeled **Flask App** represents the code in `mini_shop/main.py`. The actors, messages, database operations, customer flow, admin flow, and expected behavior apply unless your approved requirements analysis documents a correction.
 
 ## Common problems
 
@@ -350,5 +392,4 @@ Check the database username, password, and privileges. Confirm that `.env` conta
 Start the MySQL service and confirm it is listening on the default local port.
 
 **Port 8000 is already in use**  
-Stop the other application using the port, or run `uvicorn mini_shop.main:app --reload --port 8001` and open port 8001.
-
+Stop the other application using the port, or run `flask --app mini_shop.main run --debug --port 8001` and open port 8001.

@@ -1,2 +1,1 @@
-"""Mini Shop FastAPI package."""
-
+"""Mini Shop Flask package."""
